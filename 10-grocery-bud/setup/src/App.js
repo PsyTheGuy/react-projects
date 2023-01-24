@@ -2,9 +2,14 @@ import React, { useState, useEffect } from "react";
 import List from "./List";
 import Alert from "./Alert";
 
+const getList = () => {
+  const list = localStorage.getItem("list");
+  return list ? JSON.parse(list) : [];
+};
+
 function App() {
   const [name, setName] = useState("");
-  const [list, setList] = useState([]);
+  const [list, setList] = useState(getList());
   const [isEditing, setIsEditing] = useState(false);
   const [editID, setEditID] = useState(null);
   const [alert, setAlert] = useState({
@@ -12,6 +17,10 @@ function App() {
     message: "",
     type: "",
   });
+
+  useEffect(() => {
+    localStorage.setItem("list", JSON.stringify(list));
+  }, [list]);
 
   const showAlert = (show = false, message = "", type = "") => {
     setAlert({ show, message, type });
